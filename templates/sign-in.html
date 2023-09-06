@@ -5,37 +5,44 @@
 {% endblock %}
 
 {% block content %}
+  <div class="container mt-5">
+<p class="text col-10 text-center">Пожалуйста авторизуйтесь</p>
+    <form method="post">
 
-  <div class="about">
-    <div class="container">
-      <form method="post">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              <div class="alert alert-{{ category }}">
-                {{ message }}
-              </div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-        <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
 
-
-          <form class="row g-3">
-            <div class="col-md-6 mx-auto">
-              <label for="username" class="form-label">Login</label>
-              <input type="text" class="form-control form-control" name="username">
-            </div>
-            <div class="col-md-6 mx-auto">
-              <label for="exampleInputEmail1" class="form-label">Email address</label>
-              <input type="email" class="form-control form-control" name="email" aria-describedby="emailHelp">
-              <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-            </div>
-            <div class="col-md-6 mx-auto">
-              <button type="submit" class="btn btn-primary mx-end">Submit</button>
-            </div>
-          </form>
+      <div class="mb-3 row">
+        <label for="username" class="col-sm-3 col-form-label text-end">
+          Login
+        </label>
+        <div class="col-sm-5">
+          <input type="text" class="form-control plain-text" name="username" id="username" placeholder="name">
         </div>
+      </div>
 
+      <div class="mb-3 row">
+          <label for="email" class="col-sm-3 col-form-label text-end" >
+            Email address
+          </label>
+        <div class="col-sm-5">
+          <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com">
+          <div id="emailHelp" class="form-text text-end">We'll never share your email with anyone else.</div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mx-auto">
+        <button type="submit" class="btn btn-primary mx-end">Submit</button>
+      </div>
+
+    </form>
+  </div>
 
 {% endblock %}
