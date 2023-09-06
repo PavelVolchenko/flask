@@ -8,8 +8,6 @@
 
   <div class="about">
     <div class="container">
-
-{#      <form action="/submit" method="post">#}
       <form method="post">
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
@@ -20,23 +18,24 @@
             {% endfor %}
           {% endif %}
         {% endwith %}
-
-        <label>
-          <input type="text" name="username" placeholder="Enter name">
-        </label>
-        <label>
-{#          <input type="text" name="email" placeholder="Enter email address">#}
-        </label>
-        <input type="submit" value="SUBMIT">
-      </form>
+        <div class="container">
 
 
-      {#      <form method="POST" action="/">#}
-      {#        {{ form.csrf_token }}#}
-      {#        {{ form.name.label }} {{ form.name(size=20) }}#}
-      {#        <input type="submit" value="Go">#}
-      {#      </form>#}
+          <form class="row g-3">
+            <div class="col-md-6 mx-auto">
+              <label for="username" class="form-label">Login</label>
+              <input type="text" class="form-control form-control" name="username">
+            </div>
+            <div class="col-md-6 mx-auto">
+              <label for="exampleInputEmail1" class="form-label">Email address</label>
+              <input type="email" class="form-control form-control" name="email" aria-describedby="emailHelp">
+              <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="col-md-6 mx-auto">
+              <button type="submit" class="btn btn-primary mx-end">Submit</button>
+            </div>
+          </form>
+        </div>
 
-    </div>
-  </div>
+
 {% endblock %}

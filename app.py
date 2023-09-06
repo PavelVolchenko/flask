@@ -26,36 +26,20 @@ def index():
         return redirect(url_for('sign_in'))
 
 
-
-@app.route('/submit', methods=['GET', 'POST'])
-def submit():
-    if request.method == 'POST':
-        if not request.form.get('username'):
-        # if not request.form.get('name') or not request.form.get('email'):
-            flash('Все поля должны быть заполнены!', 'danger')
-            return redirect(url_for('submit'))
-        else:
-            user = request.form.get('username')
-            # email = request.form.get('email')
-            # print(user, email)
-            print(username)
-            flash('SUCCESS!', 'success')
-            return redirect(url_for('index'))
-    return render_template('sign-in.html')
-
-
-
-
 @app.route('/sign-in/', methods=['GET', 'POST'])
 def sign_in():
     if request.method == 'POST':
         session.update(username=request.form.get('username'))
+        session.update(email=request.form.get('email'))
         return redirect(url_for('index'))
     return render_template('sign-in.html')
 
 @app.route('/logout/')
 def logout():
     session.pop('username', None)
+    session.pop('email', None)
+    print(session.get('username'))
+    print(session.get('email'))
     return redirect(url_for('index'))
 
 @app.route('/redirect/')
