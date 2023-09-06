@@ -1,24 +1,41 @@
 {% extends 'base.html' %}
 
+{% block title %}
+  {{ super() }} - {{ title }}
+{% endblock %}
+
 {% block content %}
+
   <div class="about">
     <div class="container">
 
-            <form action="/submit" method="post">
-              <label>
-                <input type="text" name="name" placeholder="Enter name">
-              </label>
-              <label>
-                <input type="text" name="email" placeholder="Enter email address">
-              </label>
-              <input type="submit" value="SUBMIT">
-            </form>
+{#      <form action="/submit" method="post">#}
+      <form method="post">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
 
-{#      <form method="POST" action="/">#}
-{#        {{ form.csrf_token }}#}
-{#        {{ form.name.label }} {{ form.name(size=20) }}#}
-{#        <input type="submit" value="Go">#}
-{#      </form>#}
+        <label>
+          <input type="text" name="username" placeholder="Enter name">
+        </label>
+        <label>
+{#          <input type="text" name="email" placeholder="Enter email address">#}
+        </label>
+        <input type="submit" value="SUBMIT">
+      </form>
+
+
+      {#      <form method="POST" action="/">#}
+      {#        {{ form.csrf_token }}#}
+      {#        {{ form.name.label }} {{ form.name(size=20) }}#}
+      {#        <input type="submit" value="Go">#}
+      {#      </form>#}
 
     </div>
   </div>

@@ -45,7 +45,11 @@
             </ul>
           </li>
         </ul>
+        {% if user %}
+          <div class="d-flex pe-4"> {{ user }} </div><a href="/logout/" class="btn btn-sm btn-primary me-4">LOGOUT</a>
+        {% else %}
           <a href="/sign-in/" class="btn btn-sm btn-primary me-4">SIGN IN</a>
+        {% endif %}
         <form role="search">
           <input class="form-control" type="search" placeholder="Search" aria-label="Search">
         </form>
