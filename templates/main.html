@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ super() }} - {{ title }}
+{% endblock %}
+
+{% block content %}
+  <div class="container p-4 w-50 clearfix">
+    <div class="display-2">
+      <img src="/static/image/plate-320x240.jpg" alt="my photo" class="rounded-circle float-end">
+      Hi, my name is {{ name }}
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      {% for item in auction %}
+        <div class="col-6 col-md-4 p-2">
+          <div class="card">
+            <img src="../static/image/plate-160x120.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{ auction.title }}</h5>
+              <p class="card-text">{{ auction.description }}</p>
+              <a href="#" class="btn btn-primary">{{ auction.price }} руб.</a>
+              <label>
+                <input type="text" placeholder="Поиск" class="search">
+              </label>
+              <button class="add btn-success">&#10010;</button>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+{% endblock %}
