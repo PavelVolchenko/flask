@@ -1,55 +1,63 @@
-from flask import Flask
-from flask import render_template, make_response
-from flask import request
-from flask import redirect, url_for, flash, session
-import db
+from flask import Flask, render_template, make_response, request, redirect, url_for, flash, session
+import items
 import logging
+from config import Config
+from models import db, User, Post
 
 app = Flask(__name__)
-app.config.update(TEMPLATES_AUTO_RELOAD=True)
-app.secret_key = '4514b0a7a24c391b62a3876a5a2055cb831a3f853598bbf6274d2d4f3b986e51'
+app.config.from_object(Config)
+db.init_app(app)
 logger = logging.getLogger(__name__)
+
+
+@app.cli.command('init-db')
+def init_db():
+    db.create_all()
+    print('OK')
+
+
+@app.context_processor
+def inject_user():
+    return dict(user=request.cookies.get('user'))
 
 
 @app.route('/')
 def index():
-    if 'username' in session:
-        context = {
-            'title': "ArtCentre Главная",
-            'user': session.get('username'),
-            'cards': db.cards(),
-        }
-        response = make_response(render_template('index.html', **context))
-        print(session)
-        return response
-    else:
-        return redirect(url_for('sign_in'))
+    context = {
+        'title': "Главная страница",
+        'cards': items.cards(),
+    }
+    return render_template('index.html', **context)
+
 
 @app.route('/sign-in/', methods=['GET', 'POST'])
 def sign_in():
     if request.method == 'POST':
+        user = request.form.get('username')
+        email = request.form.get('email')
         if not request.form.get('username') or not request.form.get('email'):
-            flash('Все поля должны быть заполнены!', 'danger')
+            flash("Все поля должны быть заполнены!", 'danger')
             return redirect(url_for('sign_in'))
         else:
-            session.update(username=request.form.get('username'))
-            session.update(email=request.form.get('email'))
-            print(session.get('username'))
-            print(session.get('email'))
-            return redirect(url_for('index'))
+            response = make_response(redirect(url_for('index')))
+            response.set_cookie('user', user)
+            response.set_cookie('email', email)
+            return response
     return render_template('sign-in.html')
+
 
 @app.route('/logout/')
 def logout():
-    session.pop('username', None)
-    session.pop('email', None)
-    print(session.get('username'))
-    print(session.get('email'))
-    return redirect(url_for('index'))
+    response = make_response(redirect(url_for('sign_in')))
+    response.delete_cookie('user')
+    response.delete_cookie('email')
+    return response
+
 
 @app.route('/redirect/')
 def redirect_to_index():
     return redirect(url_for('index'))
+
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -65,7 +73,6 @@ def page_not_found(e):
 def about():
     context = {
         'title': "О нас",
-        'user': session.get('username'),
     }
     return render_template('about.html', **context)
 
@@ -74,7 +81,6 @@ def about():
 def contact():
     context = {
         'title': "Контакты",
-        'user': session.get('username'),
     }
     return render_template('contact.html', **context)
 
@@ -83,8 +89,7 @@ def contact():
 def item_card():
     context = {
         'title': "Страница товара",
-        'user': session.get('username'),
-        'plate': db.text_plate(),
+        'plate': items.text_plate(),
     }
     return render_template('item-card.html', **context)
 
@@ -93,11 +98,6 @@ def item_card():
 def auction():
     context = {
         'title': "Аукцион",
-        'user': session.get('username'),
-        'auction': db.auction(),
+        'auction': items.auction(),
     }
     return render_template('auction.html', **context)
-
-
-if __name__ == '__main__':
-    app.run()

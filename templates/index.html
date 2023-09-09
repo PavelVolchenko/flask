@@ -5,15 +5,13 @@
 {% endblock %}
 
 {% block content %}
-  <div class="container justify-content-center">
-  </div>
   <div class="container">
     <div class="row row-cols">
       <div class="card-group">
         {% for card in cards %}
           <div class="col-6 col-md-4 p-2">
             <div class="card">
-              <img src="../static/image/plate-160x120.jpg" class="card-img-top" alt="...">
+              <img src="{{ url_for('static', filename='image/plate-160x120.jpg') }}" class="card-img-top" alt="...">
               <div class="card-body">
                 <h5 class="card-title">{{ card.title }}</h5>
                 <p class="card-text">{{ card.descr }}</p>

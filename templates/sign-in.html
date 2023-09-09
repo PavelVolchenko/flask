@@ -6,9 +6,7 @@
 
 {% block content %}
   <div class="container mt-5">
-<p class="text col-10 text-center">Пожалуйста авторизуйтесь</p>
     <form method="post">
-
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           {% for category, message in messages %}
@@ -16,33 +14,28 @@
               {{ message }}
             </div>
           {% endfor %}
+          {% else %}
+          <p class="text col-10 text-center">Форма для cookies</p>
         {% endif %}
       {% endwith %}
-
       <div class="mb-3 row">
-        <label for="username" class="col-sm-3 col-form-label text-end">
-          Login
-        </label>
+        <label for="username" class="col-sm-3 col-form-label text-end">Login</label>
         <div class="col-sm-5">
           <input type="text" class="form-control plain-text" name="username" id="username" placeholder="name">
         </div>
       </div>
-
       <div class="mb-3 row">
-          <label for="email" class="col-sm-3 col-form-label text-end" >
-            Email address
-          </label>
+          <label for="email" class="col-sm-3 col-form-label text-end">Email address</label>
         <div class="col-sm-5">
           <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com">
-          <div id="emailHelp" class="form-text text-end">We'll never share your email with anyone else.</div>
+          <div id="emailHelp" class="form-text text-end">
+            We'll never share your email with anyone else.
+          </div>
         </div>
       </div>
-
       <div class="col-md-6 mx-auto">
         <button type="submit" class="btn btn-primary mx-end">Submit</button>
       </div>
-
     </form>
   </div>
-
 {% endblock %}
