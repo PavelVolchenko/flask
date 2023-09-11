@@ -22,7 +22,8 @@ def init_db():
 
 @app.context_processor
 def inject_user():
-    return dict(user=request.cookies.get('first_name'))
+    return dict(first_name=request.cookies.get('first_name'),
+                last_name=request.cookies.get('last_name'))
 
 
 @app.route('/')
@@ -73,14 +74,16 @@ def sign_up():
             print('OK!')
             response = make_response(redirect(url_for('index')))
             response.set_cookie('first_name', user.first_name)
+            response.set_cookie('last_name', user.last_name)
         return response
     return render_template('sign-up.html', form=form)
 
 
 @app.route('/logout/')
 def logout():
-    response = make_response(redirect(url_for('sign_in')))
+    response = make_response(redirect(url_for('sign_up')))
     response.delete_cookie('first_name')
+    response.delete_cookie('last_name')
     return response
 
 

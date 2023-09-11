@@ -37,8 +37,8 @@
             </ul>
           </li>
         </ul>
-        {% if user %}
-          <div class="d-flex pe-4 "><strong><u>{{ user }}</u></strong></div>
+        {% if first_name and last_name %}
+          <div class="d-flex pe-4 "><strong><u>{{ first_name }} {{ last_name }}</u></strong></div>
           <a href="/logout/" class="btn btn-sm btn-primary me-4">LOGOUT</a>
         {% else %}
           <a href="/sign-in/" class="btn btn-sm btn-primary me-4">SIGN IN</a>
