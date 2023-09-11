@@ -31,7 +31,7 @@ def extract_password(hash_password):
 
 
 def verify_password(password_to_verify, stored_password):
-    salt, key = stored_password
+    salt, key = extract_password(stored_password)
     new_key = hashlib.pbkdf2_hmac('sha256', password_to_verify.encode('utf-8'), salt, 100_000)
     if new_key == key:
         return True

@@ -3,8 +3,9 @@ from flask_wtf import CSRFProtect
 import items
 import logging
 from config import Config
-from models import db, add_user
-from form import RegistrationForm
+from models import db, add_user, User
+from form import RegistrationForm, LoginForm
+from models import verify_password
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -52,6 +53,28 @@ def sign_in():
         print(add_user(user_dict))
         return response
     return render_template('sign-in.html', form=form)
+
+
+@app.route('/sign-up/', methods=['GET', 'POST'])
+@csrf.exempt
+def sign_up():
+    form = LoginForm()
+    if request.method == 'POST' and form.validate():
+        user_dict = dict()
+        user_dict.update(
+            {
+                'email': form.email.data,
+                'password': form.password.data,
+            }
+        )
+        user = User.query.filter_by(email=user_dict.get('email')).first()
+        print(user.password)
+        if verify_password(user_dict.get('password'), user.password):
+            print('OK!')
+            response = make_response(redirect(url_for('index')))
+            response.set_cookie('first_name', user.first_name)
+        return response
+    return render_template('sign-up.html', form=form)
 
 
 @app.route('/logout/')
