@@ -1,12 +1,15 @@
 from flask import Flask, render_template, make_response, request, redirect, url_for, flash, session
+from flask_wtf import CSRFProtect
 import items
 import logging
 from config import Config
-from models import db, User, Post
+from models import db, add_user
+from form import RegistrationForm
 
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
+csrf = CSRFProtect(app)
 logger = logging.getLogger(__name__)
 
 
@@ -18,7 +21,7 @@ def init_db():
 
 @app.context_processor
 def inject_user():
-    return dict(user=request.cookies.get('user'))
+    return dict(user=request.cookies.get('first_name'))
 
 
 @app.route('/')
@@ -31,26 +34,30 @@ def index():
 
 
 @app.route('/sign-in/', methods=['GET', 'POST'])
+@csrf.exempt
 def sign_in():
-    if request.method == 'POST':
-        user = request.form.get('username')
-        email = request.form.get('email')
-        if not request.form.get('username') or not request.form.get('email'):
-            flash("Все поля должны быть заполнены!", 'danger')
-            return redirect(url_for('sign_in'))
-        else:
-            response = make_response(redirect(url_for('index')))
-            response.set_cookie('user', user)
-            response.set_cookie('email', email)
-            return response
-    return render_template('sign-in.html')
+    form = RegistrationForm()
+    if request.method == 'POST' and form.validate():
+        user_dict = dict()
+        user_dict.update(
+            {
+                'first_name': form.first_name.data,
+                'last_name': form.last_name.data,
+                'email': form.email.data,
+                'password': form.password.data,
+            }
+        )
+        response = make_response(redirect(url_for('index')))
+        response.set_cookie('first_name', user_dict.get('first_name'))
+        print(add_user(user_dict))
+        return response
+    return render_template('sign-in.html', form=form)
 
 
 @app.route('/logout/')
 def logout():
     response = make_response(redirect(url_for('sign_in')))
-    response.delete_cookie('user')
-    response.delete_cookie('email')
+    response.delete_cookie('first_name')
     return response
 
 
